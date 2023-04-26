@@ -13,6 +13,6 @@ int parses_input(char *input, char **args);
 char *command_exists(char *command, char *path);
 void command_execution(char *command_path, char **args);
 
-extern char **environ_var;
+extern char **environ;
 
 #endif /*SHELL_H*/
