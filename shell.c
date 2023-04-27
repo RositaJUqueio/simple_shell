@@ -22,26 +22,37 @@ void print_environ(void)
 }
 
 /**
-* parses_input- function parses the user input into arguments
-* @input: string to be input by user
-* @args: array of string pointers to store the parsed arguments
-*
-* Return: number of arguments
-*/
+ * parses_input - function parses the user input into arguments
+ * @input: string to be input by user
+ * @args: array of string pointers to store the parsed arguments
+ *
+ * Return: number of arguments
+ */
 int parses_input(char *input, char **args)
 {
-    /*parsing input into arguments*/
-	int args_count = 0;
-	char *arguments = strtok(input, " ");
+    int args_count = 0;
+    char *arguments = strtok(input, " \t\n");
+    char *special_char = NULL;
 
-	while (arguments != NULL && args_count < MAX_ARGS)
-	{
-		args[args_count++] = arguments;
-		arguments = strtok(NULL, " ");
-	}
-	args[args_count] = NULL;
+    while (arguments != NULL && args_count < MAX_ARGS)
+    {
+        if ((special_char = strchr(arguments, '>')) != NULL ||
+            (special_char = strchr(arguments, '<')) != NULL ||
+            (special_char = strchr(arguments, '|')) != NULL ||
+            (special_char = strchr(arguments, '&')) != NULL)
+        {
+            /* special character found */
+            args[args_count++] = special_char;
+            *special_char = '\0'; /* terminate the argument before the special character */
+        }
 
-	return (args_count);
+        args[args_count++] = arguments;
+        arguments = strtok(NULL, " \t\n");
+    }
+
+    args[args_count] = NULL;
+
+    return (args_count);
 }
 
 /**
@@ -77,43 +88,67 @@ char *command_exists(char *command, char *path)
 }
 
 /**
-* command_execution - function executes the
+* executes_command - function executes the
 * command specified by the user.
 * @args: array of string containing command its arguments
 * @command_path: string containing the PATH environment variable
 *
 */
-void command_execution(char *command_path, char **args)
+int executes_command(char **args, char *command_path)
 {
-	/*creates a child process using fork()*/
-	pid_t pid = fork();
+    pid_t pid = fork();
 
-	if (pid < 0)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-	else if (pid == 0)
-	{
-		execv(command_path, args); /*child process*/
-		/*execv will only return if there is an error*/
-		perror("execv");
-		exit(EXIT_FAILURE);
-	}
-	else
-	{
-		/*waitpid() is called to wait for the child process to complete*/
-		int status;
+    if (pid < 0)
+    {
+        perror("fork");
+        return (EXIT_FAILURE);
+    }
+    else if (pid == 0)
+    {
+        if (strcmp(args[0], "cd") == 0)
+        {
+            if (args[1] == NULL)
+            {
+                fprintf(stderr, "cd: missing argument\n");
+                return (EXIT_FAILURE);
+            }
+            if (chdir(args[1]) != 0)
+            {
+                perror("chdir");
+                return (EXIT_FAILURE);
+            }
+        }
+        else if (strcmp(args[0], "echo") == 0)
+        {
+		int i;
 
-		waitpid(pid, &status, 0);
-		/*child process status is checked using WIFEXITED() & WEXITSTATUS()*/
+            for (i = 1; args[i] != NULL; i++)
+            {
+                printf("%s ", args[i]);
+            }
+            printf("\n");
+        }
+        else
+        {
+            if (execve(command_path, args, environ) == -1)
+            {
+                perror("execve");
+                return (EXIT_FAILURE);
+            }
+        }
+    }
+    else
+    {
+        int status;
+        waitpid(pid, &status, 0);
 
-		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-		{
-			/*command exited with a non-zero status code*/
-			printf("\'%s' failed:status %d\n", args[0], WEXITSTATUS(status));
-		}
-	}
+        if (WIFEXITED(status))
+        {
+            return (WEXITSTATUS(status));
+        }
+    }
+
+    return (EXIT_FAILURE);
 }
 
 /**
@@ -125,44 +160,51 @@ void command_execution(char *command_path, char **args)
 */
 int main(void)
 {
-	char input[MAX_INPUT_LEN];
-	char *args[MAX_ARGS];
-	char *path = getenv("PATH");
-	/*int args_count = parses_input(input, args);*/
-	char *command_path = command_exists(args[0], path);
+    char input[MAX_INPUT_LEN];
+    char *args[MAX_ARGS];
+    char *path = getenv("PATH");
+    int args_count = 0;
+    char *command_path = NULL;
 
-	while (1)
+    while (1)
+    {
+        printf("$");
+        fflush(stdout);
+
+        if (fgets(input, MAX_INPUT_LEN, stdin) == NULL)
+        {
+            printf("\n");
+            break;
+        }
+        input[strcspn(input, "\n")] = '\0';
+
+        args_count = parses_input(input, args);
+
+	if (args_count == 0)/*checks if ther are arguments*/
 	{
-		printf("simple_shell~$ ");
-		fflush(stdout);/*flush stdout buffer to display prompt*/
-
-		if (fgets(input, MAX_INPUT_LEN, stdin) == NULL)
-		{
-			printf("\n");
-			break; /*exit on end-of-file (Ctrl+D)*/
-		}
-		input[strcspn(input, "\n")] = '\0';/*remove trailing newline char*/
-
-		if (args[0] == NULL)
-		{
-			continue; /*empty command-display prompt*/
-		}
-		else if (strcmp(args[0], "exit") == 0)
-		{
-			break;/*built-in exit command*/
-		}
-		else if (strcmp(args[0], "env") == 0)
-		{
-			print_environ(); /*built-in env command*/
-			continue;
-		}
-		if (command_path == NULL)
-		{
-			printf("Command '%s' not found\n", args[0]);
-			continue;
-		}
-		command_execution(command_path, args);
-		free(command_path);
+		continue;
 	}
-	return (0);
+        else if (strcmp(args[0], "exit") == 0)
+        {
+            break;
+        }
+        else if (strcmp(args[0], "env") == 0)
+        {
+            print_environ();
+            continue;
+        }
+
+        command_path = command_exists(args[0], path);
+
+        if (command_path == NULL)
+        {
+            printf("Command '%s' not found\n", args[0]);
+            continue;
+        }
+
+        executes_command(args, command_path);
+        free(command_path);
+    }
+
+    return (0);
 }
