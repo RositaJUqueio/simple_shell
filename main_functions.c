@@ -110,7 +110,7 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
  *
  * Return: void
  */
-void ctrl_c_handler(int signum)
+void handles_ctrl_c(int signum)
 {
 	if (signum == SIGINT)
 		print("\n($) ", STDIN_FILENO);

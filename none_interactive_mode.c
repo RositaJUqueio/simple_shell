@@ -5,7 +5,7 @@
  *
  * Return: void
  */
-void non_interactive_mode(void)
+void none_interactive_mode(void)
 {
 	char **current_command = NULL;
 	int i, type_command = 0;
