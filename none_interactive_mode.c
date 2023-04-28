@@ -1,11 +1,12 @@
 #include "shell.h"
 
 /**
+ * description - executes the shell
  * non_interactive_mode - Executes the shell in non-interactive mode.
  *
  * Return: void
  */
-void none_interactive_mode(void)
+void none_interactive_mode(void) /* code for non-interactive mode */
 {
 	char **current_command = NULL;
 	int i, type_command = 0;

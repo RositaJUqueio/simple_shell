@@ -1,12 +1,11 @@
 /**
  * file: functions.c
- * Authors: Rosita J Uqueio  & 
+ * Authors: Rosita J Uqueio  &
  * New & Old fuctions from previous projects.
- * 
  */
 #include "shell.h"
 
-/**  
+/**
  * print - prints a string to stdout.
  *@string: string to be printed
  *@stream: stream to print out to
