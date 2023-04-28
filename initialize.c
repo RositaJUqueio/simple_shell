@@ -10,6 +10,7 @@
 
 void initializer(char **current_command, int type_command)
 {
+	int status = 0;
 	pid_t PID;
 
 	if (type_command == EXT_COMMAND || type_command == PATH_COMMAND)

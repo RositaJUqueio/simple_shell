@@ -1,7 +1,6 @@
 #include "shell.h"
 
 /**
- * description - prints a string to stdout.
  * print - prints out char a pointer to string.
  *@string: string to be printed
  *@stream: stream to print out to
@@ -13,11 +12,6 @@ int i = 0;
 for (; string[i] != '\0'; i++)
 write(stream, &string[i], 1);
 }
-/**
- * file: functions.c
- * Authors: Rosita J Uqueio  &
- * New & Old fuctions from previous projects.
-*/
 
 /**
  *_strcpy - copies a string to another buffer
@@ -26,7 +20,6 @@ write(stream, &string[i], 1);
  *
  * Return: void
  */
-
 void _strcpy(char *source, char *dest)
 {
 int i = 0;

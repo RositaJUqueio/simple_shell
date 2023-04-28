@@ -105,7 +105,7 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 }
 
 /**
- * ctrl_c_handler - handles the signal raised by CTRL-C
+ * handles_ctrl_c- handles the signal raised by CTRL-C
  * @signum: signal number
  *
  * Return: void

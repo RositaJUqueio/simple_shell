@@ -38,6 +38,11 @@ extern int status;
 
 #define min(x, y) (((x) < (y)) ? (x) : (y))
 
+extern char **commands;
+extern char *line;
+extern char *shell_name;
+extern int status;
+
 /*old and new functions*/
 void print(char *, int);
 char **tokenizer(char *, char *);
@@ -69,7 +74,7 @@ void env(char **);
 void quit(char **);
 
 /*shell entry point*/
-extern void non_interactive_mode(void);
+extern void none_interactive_mode(void);
 extern void initializer(char **current_command, int type_command);
 
 #endif /*SHELL_H*/

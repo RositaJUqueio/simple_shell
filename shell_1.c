@@ -21,11 +21,6 @@ void env(char **tokenized_command __attribute__((unused)))
 
 #include "shell.h"
 
-char **commands = NULL;
-char *line = NULL;
-char *shell_name = NULL;
-int status = 0;
-
 /**
  * main - the main shell code
  * @argc: number of arguments passed
@@ -34,16 +29,18 @@ int status = 0;
  * Prints error on Failure
  * Return: 0 on success
  */
-
-extern void none_interactive_mode(void);
-int main(int argc __attribute__((unused)), char **argv)
+int main(int argc __attribute__((unused)), char **argv __attribute__((unused)))
 {
+	char **commands = NULL;
+	char *line = NULL;
+	/*char *shell_name = NULL;*/
+	int status = 0;
 	char **current_command = NULL;
 	int i, type_command = 0;
 	size_t n = 0;
 
 	signal(SIGINT, handles_ctrl_c);
-	shell_name = argv[0];
+	/*shell_name = argv[0];*/
 	while (1)
 	{
 		none_interactive_mode();
@@ -66,8 +63,6 @@ int main(int argc __attribute__((unused)), char **argv)
 				break;
 			}
 			type_command = parse_command(current_command[0]);
-
-			/* initializer -   */
 			initializer(current_command, type_command);
 			free(current_command);
 		}
@@ -88,6 +83,10 @@ int main(int argc __attribute__((unused)), char **argv)
 
 void quit(char **tokenized_command)
 {
+	char **commands = NULL;
+	char *line = NULL;
+	char *shell_name = NULL;
+	int status = 0;
 	int num_token = 0, arg;
 
 	for (; tokenized_command[num_token] != NULL; num_token++)
