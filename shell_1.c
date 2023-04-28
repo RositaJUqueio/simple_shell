@@ -21,6 +21,11 @@ void env(char **tokenized_command __attribute__((unused)))
 
 #include "shell.h"
 
+char **commands = NULL;
+char *line = NULL;
+char *shell_name = NULL;
+int status = 0;
+
 /**
  * main - the main shell code
  * @argc: number of arguments passed
@@ -33,10 +38,6 @@ void env(char **tokenized_command __attribute__((unused)))
 extern void none_interactive_mode(void);
 int main(int argc __attribute__((unused)), char **argv)
 {
-	char **commands = NULL;
-	char *line = NULL;
-	char *shell_name = NULL;
-	int status = 0;
 	char **current_command = NULL;
 	int i, type_command = 0;
 	size_t n = 0;

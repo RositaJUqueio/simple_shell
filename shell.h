@@ -30,6 +30,12 @@ typedef struct map
 	void (*func)(char **command);
 } function_map;
 
+extern char **environ;
+extern char *line;
+extern char **commands;
+extern char *shell_name;
+extern int status;
+
 #define min(x, y) (((x) < (y)) ? (x) : (y))
 
 /*old and new functions*/
