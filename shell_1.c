@@ -53,7 +53,7 @@ int main(int argc __attribute__((unused)), char **argv)
 			free(line);
 			exit(status);
 		}
-			rv_newline(line);
+			rm_newline(line);
 			rm_comment(line);
 			commands = tokenizer(line, ";");
 
