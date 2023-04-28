@@ -1,39 +1,38 @@
-/**
- * file: functions.c
- * Authors: Rosita J Uqueio  &
- * New & Old fuctions from previous projects.
- */
 #include "shell.h"
 
 /**
- * print - prints a string to stdout.
+ * description - prints a string to stdout.
+ * print - prints out char a pointer to string.
  *@string: string to be printed
  *@stream: stream to print out to
  *
  */
-void print(char *string, int stream)
+void print(char *string, int stream) /* prints both char and int */
 {
-	int i = 0;
-
-	for (; string[i] != '\0'; i++)
-		write(stream, &string[i], 1);
+int i = 0;
+for (; string[i] != '\0'; i++)
+write(stream, &string[i], 1);
 }
+/**
+ * file: functions.c
+ * Authors: Rosita J Uqueio  &
+ * New & Old fuctions from previous projects.
+*/
 
 /**
  *_strcpy - copies a string to another buffer
- *@source: source to copy from
- *@dest: destination to copy to
+ *@source: source pointer to it
+ *@dest: destination pointer to it
  *
  * Return: void
  */
 
 void _strcpy(char *source, char *dest)
 {
-	int i = 0;
-
-	for (; source[i] != '\0'; i++)
-		dest[i] = source[i];
-	dest[i] = '\0';
+int i = 0;
+for (; source[i] != '\0'; i++)
+dest[i] = source[i];
+dest[i] = '\0';
 }
 
 /**
@@ -45,13 +44,12 @@ void _strcpy(char *source, char *dest)
 
 int _strlen(char *string)
 {
-	int len = 0;
-
-	if (string == NULL)
-		return (len);
-	for (; string[len] != '\0'; len++)
-		;
-	return (len);
+int len = 0;
+if (string == NULL)
+return (len);
+for (; string[len] != '\0'; len++)
+;
+return (len);
 }
 
 /**
@@ -64,15 +62,14 @@ int _strlen(char *string)
 
 void rm_newline(char *str)
 {
-	int i = 0;
-
-	while (str[i] != '\0')
-	{
-		if (str[i] == '\n')
-			break;
-		i++;
-	}
-	str[i] = '\0';
+int i = 0;
+while (str[i] != '\0')
+{
+if (str[i] == '\n')
+break;
+i++;
+}
+str[i] = '\0';
 }
 
 /**
@@ -85,23 +82,19 @@ void rm_newline(char *str)
 
 char **tokenizer(char *input_string, char *delim)
 {
-	int num_delim = 0;
-	char **av = NULL;
-	char *token = NULL;
-	char *save_ptr = NULL;
-
-	token = _strtok_r(input_string, delim, &save_ptr);
-
-	while (token != NULL)
-	{
-		av = _realloc(av, sizeof(*av) * num_delim, sizeof(*av) * (num_delim + 1));
-		av[num_delim] = token;
-		token = _strtok_r(NULL, delim, &save_ptr);
-		num_delim++;
-	}
-
-	av = _realloc(av, sizeof(*av) * num_delim, sizeof(*av) * (num_delim + 1));
-	av[num_delim] = NULL;
-
-	return (av);
+int num_delim = 0;
+char **av = NULL;
+char *token = NULL;
+char *save_ptr = NULL;
+token = _strtok_r(input_string, delim, &save_ptr);
+while (token != NULL)
+{
+av = _realloc(av, sizeof(*av) * num_delim, sizeof(*av) * (num_delim + 1));
+av[num_delim] = token;
+token = _strtok_r(NULL, delim, &save_ptr);
+num_delim++;
+}
+av = _realloc(av, sizeof(*av) * num_delim, sizeof(*av) * (num_delim + 1));
+av[num_delim] = NULL;
+return (av);
 }

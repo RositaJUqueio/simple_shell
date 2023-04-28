@@ -1,12 +1,13 @@
 #include "shell.h"
 
 
-/** parse_command - determines the type of the command
+/**
+ * parse_command - determines the type of the command
  * @command: command to be parsed
  *
  * Return: constant representing the type of the command
  * Description -
- * 		 EXT_COMMAND -> commands like /bin/ls
+ * EXT_COMMAND -> commands like /bin/ls
  *		 INT_COMMAND -> commands like exit, env
  *		 PATH_COMMAND -> commands found in the PATH like ls
  *		 INVALID_COMMAND  -> invalid commands
