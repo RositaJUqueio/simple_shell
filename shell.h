@@ -72,6 +72,9 @@ void quit(char **);
 extern void none_interactive_mode(void);
 extern void initializer(char **current_command, int type_command);
 
+/*more advanced*/
+char *custom_getline(void);
+
 #endif /*SHELL_H*/
 
 
