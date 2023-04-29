@@ -106,7 +106,7 @@ void quit(char **tokenized_command)
 		if (arg == -1)
 		{
 			print(shell_name, STDERR_FILENO);
-			print(": 1: exit: error ", STDERR_FILENO);
+			print(": 1: exit: Illegal number: ", STDERR_FILENO);
 			print(tokenized_command[1], STDERR_FILENO);
 			print("\n", STDERR_FILENO);
 			status = 2;
